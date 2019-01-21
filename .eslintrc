@@ -1,0 +1,35 @@
+{
+    "extends": "airbnb",
+    "settings": {
+      "import/resolver": {
+        "node": {
+          "paths": ["src"]
+        }
+      }
+    },
+    "env": {
+      "browser": true,
+      "jest": true
+    },
+    "globals": {
+      "shallow": true,
+      "render": true,
+      "mount": true,
+      "APP": true
+    },
+    "rules": {
+      "no-console": 0,
+      "jsx-a11y/label-has-for": [ 2, {
+        "required": {
+          "every": [ "id" ]
+        }
+      }],
+      "jsx-a11y/anchor-is-valid": [ 2, {
+        "specialLink": [ "to" ]
+      }],
+      "comma-dangle": [1, "never"],
+      "max-len": 0,
+      "object-curly-newline": [2, { "consistent": true }],
+      "import/extensions": 0
+    }
+  }
