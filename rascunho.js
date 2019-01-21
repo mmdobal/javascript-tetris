@@ -183,3 +183,20 @@ function drawMatrix(matrixObj, offset) {
   });
 }
 drawMatrix(pieces, { x: 1, y: 1 });
+
+drawMatrix(rotate(getMatrix(pieces)), { x: 5, y: 5 });
+console.log(rotate(getMatrix(pieces)));
+
+
+[0, 1, 0, 0], 
+[0, 1, 0, 0], 
+[0, 1, 0, 0], 
+[0, 1, 0, 0]]
+
+[0, 1, 0], 
+[1, 1, 1], 
+[0, 0, 0]
+
+[1, 1, 0], 
+[0, 1, 1], 
+[0, 0, 0]
