@@ -200,3 +200,63 @@ console.log(rotate(getMatrix(pieces)));
 [1, 1, 0], 
 [0, 1, 1], 
 [0, 0, 0]
+
+
+let board = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+]
+
+// https://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
+// https://codereview.stackexchange.com/questions/114702/drawing-a-grid-on-canvas
+// https://stackoverflow.com/questions/21316084/requestanimationframe-what-exactly-is-the-timestamp
+
+
+function merge(boardArg, playerArg) {
+  const matrix = pieces[playerArg.key];
+  matrix.forEach((row, y) => {
+    row.forEach((value, x) => {
+      if (value !== 0) {
+        boardArg[y + playerArg.pos.y][x + playerArg.pos.x] = value;
+      }
+    });
+  });
+}
+
+
+function collide(boardArg, playerArg) {
+  const m = pieces[playerArg.key];
+  const o = playerArg.pos;
+  for (let y = 0; y < m.length; y += 1) {
+    for (let x = 0; x < m[y].length; x += 1) {
+      if (m[y][x] !== 0
+             && (boardArg[y + o.y]
+              && boardArg[y + o.y][x + o.x]) !== 0) {
+        return true;
+      }
+    }
+  }
+  return false;
+}

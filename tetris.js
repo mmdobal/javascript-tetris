@@ -2,7 +2,6 @@ window.onload = () => {
   const canvas = document.getElementById('my-canvas');
   const ctx = canvas.getContext('2d');
 
-  // grid https://codereview.stackexchange.com/questions/114702/drawing-a-grid-on-canvas
   function drawGrid(w, h, step) {
     canvas.width = w;
     canvas.height = h;
@@ -26,6 +25,33 @@ window.onload = () => {
 
   drawGrid(200, 480, 20);
 
+  const board = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  ];
+
   const pieces = {
     I: [[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0]],
     O: [[1, 1], [1, 1]],
@@ -36,22 +62,37 @@ window.onload = () => {
     T: [[0, 1, 0], [1, 1, 1], [0, 0, 0]]
   };
 
-  // recebe um objeto e pega o valor de uma propriedade aleatoria
-  function getMatrix(obj) {
+  const colors = {
+    I: 'red',
+    O: 'green',
+    J: 'blue',
+    L: 'yellow',
+    Z: 'orange',
+    S: 'pink',
+    T: 'purple'
+  };
+
+  // pega uma chave aleatória do objeto
+  function getKey(obj) {
     const objkeys = Object.keys(obj);
-    const value = objkeys[Math.floor(Math.random() * objkeys.length)];
-    return obj[value];
+    return objkeys[Math.floor(Math.random() * objkeys.length)];
   }
-  //   console.log(getMatrix(pieces));
 
   // desenha uma peça de acordo com a matriz recebida
-  function drawMatrix(matrix, offset) {
+  function drawPiece(key, offset) {
+    const matrix = pieces[key];
+    const color = colors[key];
     ctx.scale(20, 20);
     matrix.forEach((row, y) => {
       row.forEach((value, x) => {
         if (value !== 0) {
-          ctx.fillStyle = 'red';
+          ctx.lineWidth = 0.05;
+          ctx.fillStyle = color
+          ctx.strokeStyle = 'white';
           ctx.fillRect(x + offset.x,
+            y + offset.y,
+            1, 1);
+          ctx.strokeRect(x + offset.x,
             y + offset.y,
             1, 1);
         }
@@ -59,17 +100,19 @@ window.onload = () => {
     });
   }
 
-  const player = {
-    pos: { x: 3, y: 0 },
-    matrix: getMatrix(pieces)
+  let current = { 
+    pos: { x: 3, y: 0 }, // para começar no meio
+    key: getKey(pieces) // gerando uma chave que vai servir pra pegar valores dos objs pieces e colors
+    // matrix: pieces[getKey(pieces)]
   };
 
   function draw() {
     drawGrid(200, 480, 20);
-    drawMatrix(player.matrix, player.pos);
+    drawPiece(current.key, current.pos);
   }
 
-  function rotate(matrix) {
+  function rotate(key) {
+    const matrix = pieces[key];
     const origMatrix = matrix.slice();
     for (let i = 0; i < matrix.length; i += 1) {
       const row = matrix[i].map((x, j) => {
@@ -89,8 +132,8 @@ window.onload = () => {
     lastTime = time;
 
     dropCounter += deltaTime;
-    if (dropCounter > dropInterval) {
-      player.pos.y += 1;
+    if (dropCounter > dropInterval && current.pos.y < 22) {
+      current.pos.y += 1;
       dropCounter = 0;
     }
 
@@ -98,16 +141,18 @@ window.onload = () => {
     requestAnimationFrame(update);
   }
 
+
   document.addEventListener('keydown', (event) => {
     if (event.keyCode === 37) {
-      player.pos.x -= 1;
-    } else if (event.keyCode === 39) {
-      player.pos.x += 1;
+      current.pos.x -= 1;
     } else if (event.keyCode === 38) {
-      player.matrix = rotate(player.matrix);
+      current.matrix = rotate(current.key);
+    } else if (event.keyCode === 39) {
+      current.pos.x += 1;
+    } else if (event.keyCode === 40 && current.pos.y < 22) {
+      current.pos.y += 1;
     }
   });
 
   update();
-//   draw();
 };
