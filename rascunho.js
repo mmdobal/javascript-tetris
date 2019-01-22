@@ -234,21 +234,21 @@ let board = [
 // https://stackoverflow.com/questions/21316084/requestanimationframe-what-exactly-is-the-timestamp
 
 
-function merge(boardArg, playerArg) {
-  const matrix = pieces[playerArg.key];
+function merge(boardArg, currentArg) {
+  const matrix = pieces[currentArg.key];
   matrix.forEach((row, y) => {
     row.forEach((value, x) => {
       if (value !== 0) {
-        boardArg[y + playerArg.pos.y][x + playerArg.pos.x] = value;
+        boardArg[y + currentArg.pos.y][x + currentArg.pos.x] = value;
       }
     });
   });
 }
 
 
-function collide(boardArg, playerArg) {
-  const m = pieces[playerArg.key];
-  const o = playerArg.pos;
+function collide(boardArg, currentArg) {
+  const m = pieces[currentArg.key];
+  const o = currentArg.pos;
   for (let y = 0; y < m.length; y += 1) {
     for (let x = 0; x < m[y].length; x += 1) {
       if (m[y][x] !== 0
