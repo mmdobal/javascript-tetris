@@ -465,3 +465,9 @@ window.onload = () => {
   update();
 };
 
+array.forEach(function(item) {
+  if (item === [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]){
+    array = array.splice(array.indexOf(item), 1).unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  }
+  return array;
+})

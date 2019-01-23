@@ -216,6 +216,15 @@ window.onload = () => {
       pos: {x: 0, y: 0},
       matrix: null
   };
+
+  let newarray = function(array){
+    array.forEach(function(item) {
+      if (item === [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]){
+        array.splice(array.indexOf(item), 1).unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+      }
+      return array;
+    })
+  };
   
   reset();
   update();
