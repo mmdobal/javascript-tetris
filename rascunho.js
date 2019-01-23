@@ -232,7 +232,7 @@ let board = [
 // https://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
 // https://codereview.stackexchange.com/questions/114702/drawing-a-grid-on-canvas
 // https://stackoverflow.com/questions/21316084/requestanimationframe-what-exactly-is-the-timestamp
-
+// https://stackoverflow.com/questions/7837456/how-to-compare-arrays-in-javascript
 
 function merge(boardArg, currentArg) {
   const matrix = pieces[currentArg.key];
@@ -471,3 +471,35 @@ array.forEach(function(item) {
   }
   return array;
 })
+
+
+function arenaSweep() {
+  let rowCount = 1;
+  outer: for (let y = board.length -1; y > 0; --y) {
+      for (let x = 0; x < board[y].length; ++x) {
+          if (board[y][x] === 0) {
+              continue outer;
+          }
+      }
+
+      const row = board.splice(y, 1)[0].fill(0);
+      board.unshift(row);
+      ++y;
+
+      player.score += rowCount * 10;
+      rowCount *= 2;
+  }
+}
+
+function rotate(matrix) {
+  const origMatrix = matrix.slice();
+  for (let i = 0; i < matrix.length; i += 1) {
+    const row = matrix[i].map((x, j) => {
+      const k = (matrix.length - 1) - j;
+      return origMatrix[k][i];
+    });
+    matrix[i] = row;
+  }
+
+  return matrix;
+}

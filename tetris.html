@@ -10,22 +10,51 @@
   <!-- <link rel="stylesheet" href="style.css"> -->
   <title>Tetris</title>
   <style>
+    @import url('https://fonts.googleapis.com/css?family=Press+Start+2P');
+    @import url('https://fonts.googleapis.com/css?family=VT323');
+    body {
+      background-color: rgb(243, 247, 245);
+      display: flex;
+    }
     canvas {
-        background-color: rgb(148, 144, 144)
+      /* background-color: rgb(200, 247, 197); */
+      margin: 15px 0;
+      border-style: solid;
+      border-width: 3px;
+      border-color: rgb(0, 52, 77);
+    }
+    #game-board {
+      text-align: center;
+      width: 540px;
+      height: 540px;
+      background-image:url('original.gif');
+      background-repeat: no-repeat;
+      background-size: 540px;
+      margin: 5px 350px;
+      border-style: solid;
+      border-width: 3px;
+      border-color: rgb(0, 52, 77);
+    }
+    .score-board {
+      font-family: 'Press Start 2P', cursive;
+      /* font-family: 'VT323', monospace; */
+      font-size: 0.7em;
+      color:white;
+      background-color: '#C7FFEE';
+      width: 200;
+      height: 50;
+      margin: 5px 130px;
+      border-style: solid;
+      border-width: 3px;
+      border-color: rgb(0, 52, 77);
     }
 </style>
 </head>
 <body>
-  <!-- <div class="game-intro">
-    <img src="./images/logo.png" alt="" class="logo-img">
-    <br>
-    <button id="start-button">StartGame</button>
-    <p>Use the left and right arrow to control the car!</p>
-    <img src="./images/arrows.png" alt="" class="arrows-img">
-  </div> -->
   <div id="game-board">
     <canvas id="my-canvas" width="200" height="400">
     </canvas>
+    <div class = "score-board"><h2>SCORE</h2><p><h1 id="points">0</h1></p></div>
   </div>
 </body>
 </html>

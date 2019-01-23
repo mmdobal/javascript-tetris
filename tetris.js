@@ -4,7 +4,7 @@ window.onload = () => {
   
   context.scale(20, 20);
 
-  const board = [
+  let board = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -26,22 +26,7 @@ window.onload = () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   ];
-  
-  function collide(board, current) {
-      const m = current.matrix;
-      const o = current.pos;
-      for (let y = 0; y < m.length; ++y) {
-          for (let x = 0; x < m[y].length; ++x) {
-              if (m[y][x] !== 0 &&
-                 (board[y + o.y] &&
-                  board[y + o.y][x + o.x]) !== 0) {
-                  return true;
-              }
-          }
-      }
-      return false;
-  }
-  
+
   function createPiece(type)
   {
       if (type === 'I') {
@@ -89,12 +74,26 @@ window.onload = () => {
       }
   }
   
+  function collide(board, current) {
+      for (let y = 0; y < current.matrix.length; y += 1) {
+          for (let x = 0; x < current.matrix[y].length; x += 1) {
+              if (current.matrix[y][x] !== 0 &&
+                 (board[y + current.pos.y] &&
+                  board[y + current.pos.y][x + current.pos.x]) !== 0) {
+                  return true;
+              }
+          }
+      }
+      return false;
+  }
+
+  
   function drawMatrix(matrix, offset) {
       matrix.forEach((row, y) => {
           row.forEach((value, x) => {
               if (value !== 0) {
-                  context.lineWidth = 0.05;
-                  context.strokeStyle = 'white';
+                  context.lineWidth = 0.08;
+                  context.strokeStyle = '#C7FFEE';
                   context.fillStyle = colors[value];
                   context.fillRect(x + offset.x,
                                    y + offset.y,
@@ -108,7 +107,7 @@ window.onload = () => {
   }
   
   function draw() {
-      context.fillStyle = '#e2eda6';
+      context.fillStyle = '#139096';
       context.fillRect(0, 0, canvas.width, canvas.height);
   
       drawMatrix(board, {x: 0, y: 0});
@@ -124,6 +123,36 @@ window.onload = () => {
           });
       });
   }
+
+//   function checkRows(){
+//     board.forEach(function(element) {
+//       if (element.indexOf('0') === -1) {
+//         board.splice(board.indexOf(element), 1);
+//         board.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+//       };
+//     });
+//   };
+
+function checkBoard() {
+    // let rowCount = 1;
+    check: for (let y = board.length -1; y > 0; y -= 1) {
+        for (let x = 0; x < board[y].length; x += 1) {
+            if (board[y][x] === 0) {
+                continue check;
+            }
+        }
+
+        // const row = board.splice(y, 1)[0].fill(0);
+        // board.unshift(row);
+        board.splice(y, 1);
+        board.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        // y += 1;
+        current.score += 10;
+        document.getElementById("points").innerHTML = current.score;
+        // player.score += rowCount * 10;
+        // rowCount *= 2;
+    }
+}
   
   function rotate(matrix) {
     const origMatrix = matrix.slice();
@@ -143,7 +172,7 @@ window.onload = () => {
       current.matrix = createPiece(pieces[Math.floor(Math.random() * Math.floor(pieces.length))]); //pieces[getKey(pieces)]; //
       current.pos.y = 0;
       current.pos.x = 3;
-      console.log(Math.floor(Math.random() * Math.floor(pieces.length)));
+      // console.log(Math.floor(Math.random() * Math.floor(pieces.length)));
   }
   
   let dropCounter = 0;
@@ -160,12 +189,12 @@ window.onload = () => {
             current.pos.y -= 1;
             merge(board, current);
             reset();
+            checkBoard();
         }
         dropCounter = 0;
       }
   
       lastTime = time;
-  
       draw();
       requestAnimationFrame(update);
   }
@@ -182,24 +211,22 @@ window.onload = () => {
       } else if (event.keyCode === 40) {
         current.pos.y += 1;
         if (collide(board, current)) {
-          current.pos.y -= 1;
-      }
+          current.pos.y -= 1;}
       } else if (event.keyCode === 38) {
         if (!collide(board, current)) {
-          rotate(current.matrix);
-      }
+          rotate(current.matrix);}
       }
   });
   
   const colors = [
       null,
-      '#FF0D72',
-      '#0DC2FF',
-      '#0DFF72',
-      '#F538FF',
-      '#FF8E0D',
-      '#FFE138',
-      '#3877FF',
+      '#00122A',
+      '#0A4958',
+      '#000409',
+      '#004C5C',
+      '#37AEA8',
+      '#96E5CD',
+      '#003245',
   ];
 
   // const pieces = {
@@ -214,18 +241,12 @@ window.onload = () => {
   
   const current = {
       pos: {x: 0, y: 0},
-      matrix: null
+      matrix: null,
+      score: 0
   };
 
-  let newarray = function(array){
-    array.forEach(function(item) {
-      if (item === [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]){
-        array.splice(array.indexOf(item), 1).unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-      }
-      return array;
-    })
-  };
-  
   reset();
   update();
+
+  // https://data.whicdn.com/images/292942903/original.gif
 };
